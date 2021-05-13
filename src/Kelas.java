@@ -1,8 +1,11 @@
+package cs2030s.grader;
+
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.function.Function;
 
 /**
  * Kelas is a wrapper around Java's reflection Class class.  It provides
@@ -23,7 +26,7 @@ public class Kelas {
      * @throws ClassNotFoundException Thrown if the className is not valid.
      */
     public Kelas(String className) throws ClassNotFoundException {
-        this.c = Class.forName(className);
+      this.c = Class.forName(className);
     }
 
     /**
@@ -68,6 +71,14 @@ public class Kelas {
      */
     public KelasMethods getMethods() {
         return new KelasMethods(Stream.of(this.c.getDeclaredMethods()));
+    }
+
+    /**
+     * Get all constructors
+     * @return KelasConstructors
+     */
+    public KelasConstructors getConstructors() {
+      return new KelasConstructors(Stream.of(this.c.getDeclaredConstructors()));
     }
 
     public boolean doesExtend(Kelas parent) {
@@ -133,6 +144,12 @@ public class Kelas {
         return list;
     }
 
+    public List<Class<?>> getSubclasses() throws ClassNotFoundException, java.io.IOException {
+        return KelasUtils.getClasses().stream()
+          .filter(c -> this.c.equals(c.getSuperclass()))
+          .collect(java.util.stream.Collectors.toList());
+    }
+
     /**
      * Checks if this class share at least one common (immediate) parent with
      * another class.  The common parent could be a class or an interface.
@@ -155,5 +172,9 @@ public class Kelas {
 
     public boolean equals(Kelas k2) {
         return c.equals(k2.c);
+    }
+
+    public <T> T apply(Function<Class<?>, T> func) {
+      return func.apply(c);
     }
 }
