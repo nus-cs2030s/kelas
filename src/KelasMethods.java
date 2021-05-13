@@ -1,3 +1,5 @@
+package cs2030s.grader;
+
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -132,5 +134,10 @@ public class KelasMethods {
      */
     public boolean arePresent() {
         return !areAbsent();
+    }
+
+    @Override
+    public String toString() {
+        return this.stream.reduce("", (str, method) -> str + method.toString() + "\n", (str, method) -> str);
     }
 }
