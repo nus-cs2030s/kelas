@@ -1,3 +1,5 @@
+package cs2030s.grader;
+
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
@@ -35,6 +37,10 @@ public class KelasFields{
             : f -> !Modifier.isPrivate(f.getModifiers());
         this.stream = this.stream.filter(pred);
         return this;
+    }
+
+    public boolean hasOnlyPrivate() {
+        return this.stream.allMatch(f -> Modifier.isPrivate(f.getModifiers()));
     }
 
     public KelasFields areProtected(boolean allowed) {
@@ -197,4 +203,10 @@ public class KelasFields{
     public boolean arePresent() {
         return !areAbsent();
     }
+
+    @Override
+    public String toString() {
+        return this.stream.reduce("", (str, field) -> str + field.toString() + "\n", (str, field) -> str);
+    }
+
 }
