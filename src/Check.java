@@ -1,3 +1,5 @@
+package cs2030s.grader;
+
 class Check {
     private boolean pass;
     private String error;
